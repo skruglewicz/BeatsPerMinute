@@ -62,5 +62,13 @@ See the following Azure Sphere Quickstarts to learn how to build and deploy this
    -  [on the Linux command line](https://docs.microsoft.com/azure-sphere/install/qs-blink-linux-cli)
 
 ## Observe the output
-##TODO
 
+Remote debugging from host 192.168.35.1, port 65262
+ADC application starting.
+OLED found!
+2	77	0	600	-1000
+4	76	0	600	-1000
+6	76	0	600	-1000
+8	75	0	600	-1000
+10	78	0	600	-1000
+12	76	0	600	-1000
