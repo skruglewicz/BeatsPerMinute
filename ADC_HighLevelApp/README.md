@@ -15,16 +15,21 @@ The sample uses the following Azure Sphere libraries and requires [beta APIs](ht
 
 | File/folder | Description |
 |-------------|-------------|
-| ADC_HighLevelApp       |Sample source code and project files |
+| ADC_HighLevelApp       | Source code and project files |
 | README.md | This readme file |
+| Hardware | Azure Sphere Hardware Definition|
 
 ## Prerequisites
 ##TODO
 The sample requires the following hardware:
 
-1. [Seeed MT3620 Development Kit](https://aka.ms/azurespheredevkits) or other hardware that implements the [MT3620 Reference Development Board (RDB)](https://docs.microsoft.com/azure-sphere/hardware/mt3620-reference-board-design) design.
+	• [Avnet Azure Sphere MT3620 Starter Kit](https://www.element14.com/community/view-product.jspa?fsku=&nsku=02AH9206&COM=noscript)
 
-1. [10K ohm Potentiometer](https://www.digikey.com/product-detail/en/bourns-inc/3386P-1-103TLF/3386P-103TLF-ND/1232547?_ga=2.193850989.1306863045.1559007598-536084904.1559007598).
+	• [Heart Sensor](https://pulsesensor.com/products/pulse-sensor-amped)
+	
+	• 128x64 Yellow Blue SSD1306 I2C OLED Display
+        eg. this one for $6.99 from Amazon...
+	    [SSD1306](https://www.amazon.com/gp/product/B072Q2X2LL/)
 
 **Note:** By default, this sample targets [MT3620 reference development board (RDB)](https://docs.microsoft.com/azure-sphere/hardware/mt3620-reference-board-design) hardware, such as the MT3620 development kit from Seeed Studio. To build the sample for different Azure Sphere hardware, change the Target Hardware Definition Directory in the project properties. For detailed instructions, see the [README file in the Hardware folder](../../../Hardware/README.md).
 
@@ -35,12 +40,12 @@ The sample requires the following hardware:
 1. Enable application development, if you have not already done so, by entering the following line at the command prompt:
 
    `azsphere device enable-development`
-##TODO
-1. Clone the [Azure Sphere samples](https://github.com/Azure/azure-sphere-samples) repo and find the ADC_HighLevelApp sample in the ADC folder.
+
+1. Clone the [Beats Per Minute](https://github.com/skruglewicz/BeatsPerMinute) repo and find the ADC_HighLevelApp sample in the ADC folder.
 
 
 ## Set up the ADC connections
-##TOdo
+##TODO
 1. Connect MT3620 dev board pin H2.2 (GND) to an outer terminal of the potentiometer.
 1. Connect both pin 1 and pin 2 of jumper J1 to the other outer terminal of the potentiometer. This connects the MT3620 2.5 V output to the ADC VREF pin and to the potentiometer.  
 1. Connect MT3620 dev board pin H2.11 (GPIO41 / ADC0) to the center terminal of the potentiometer.
@@ -58,13 +63,4 @@ See the following Azure Sphere Quickstarts to learn how to build and deploy this
 
 ## Observe the output
 ##TODO
-After you have built, deployed, and started the sample the ADC output will be displayed in the output terminal or window.
-Adjust the potentiometer and observe that the displayed value changes. For example:
 
-```sh
-         Show output from: Device Output
-         The out sample value is 2.500 V
-         The out sample value is 2.483 V
-         The out sample value is 2.337 V
-         The out sample value is 2.055 V
-```
