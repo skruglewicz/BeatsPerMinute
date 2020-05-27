@@ -283,10 +283,13 @@ int initI2c(void) {
 	if (oled_init())
 	{
 		Log_Debug("OLED not found!\n");
+		return -1;
 	}
 	else
 	{
 		Log_Debug("OLED found!\n");
+		return 0;
+
 	}
 
 	//// Draw AVNET logo

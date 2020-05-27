@@ -586,17 +586,20 @@ void update_oled()
 //change this to sending BPM
 void update_BPM(void)
 {
+	//SAK 5-12-2020 -- made changes to how BPM is displayed.
+
 	uint32_t i;
 	uint8_t string_data[10];
 
-	//sak added sett bpm to x
+	//sak added set bpm to x
 	float x = (float)BPM;
+
 
 	float y = 0;
 	float z = 0;
 
 	// Strings for labels
-	uint8_t str_light[] = "BPM:";
+	uint8_t str_light[] = "";
 	uint8_t str_tbd1[] = "TBD 1:";
 	uint8_t str_tbd2[] = "TBD 2:";
 
@@ -606,35 +609,36 @@ void update_BPM(void)
 	// Draw the title
 	sd1306_draw_string(OLED_TITLE_X, OLED_TITLE_Y, "BPM", FONT_SIZE_TITLE, white_pixel);
 
-	// Convert x value to string
-	ftoa(x, string_data, 2);
+	//// Convert x value to string
+	//ftoa(x, string_data, 2);
+	ftoa(x, string_data, 0);
 
-	// Draw a label at line 1
-	sd1306_draw_string(OLED_LINE_1_X, OLED_LINE_1_Y, str_light, FONT_SIZE_LINE, white_pixel);
+	//// Draw a label at line 1
+	//sd1306_draw_string(OLED_LINE_1_X, OLED_LINE_1_Y, str_light, FONT_SIZE_LINE, white_pixel);
 	// Draw the value of x
-	sd1306_draw_string(sizeof(str_light) * 6, OLED_LINE_1_Y, string_data, FONT_SIZE_LINE, white_pixel);
-	// Draw the units of x
-	sd1306_draw_string(sizeof(str_light) * 6 + (get_str_size(string_data) + 1) * 6, OLED_LINE_1_Y, "Beats", FONT_SIZE_LINE, white_pixel);
+	sd1306_draw_string(sizeof(str_light) * 6, OLED_LINE_1_Y+4, string_data, FONT_SIZE_LINE+4, white_pixel);
+	//// Draw the units of x
+	//sd1306_draw_string(sizeof(str_light) * 6 + (get_str_size(string_data) + 1) * 6, OLED_LINE_1_Y, "Beats", FONT_SIZE_LINE, white_pixel);
 
 	// Convert y value to string
 	ftoa(y, string_data, 2);
 
-	// Draw a label at line 2
-	sd1306_draw_string(OLED_LINE_2_X, OLED_LINE_2_Y, str_tbd1, FONT_SIZE_LINE, white_pixel);
-	// Draw the value of y
-	sd1306_draw_string(sizeof(str_tbd1) * 6, OLED_LINE_2_Y, string_data, FONT_SIZE_LINE, white_pixel);
-	// Draw the units of y
-	sd1306_draw_string(sizeof(str_tbd1) * 6 + (get_str_size(string_data) + 1) * 6, OLED_LINE_2_Y, "Units", FONT_SIZE_LINE, white_pixel);
+	//// Draw a label at line 2
+	//sd1306_draw_string(OLED_LINE_2_X, OLED_LINE_2_Y, str_tbd1, FONT_SIZE_LINE, white_pixel);
+	//// Draw the value of y
+	//sd1306_draw_string(sizeof(str_tbd1) * 6, OLED_LINE_2_Y, string_data, FONT_SIZE_LINE, white_pixel);
+	//// Draw the units of y
+	//sd1306_draw_string(sizeof(str_tbd1) * 6 + (get_str_size(string_data) + 1) * 6, OLED_LINE_2_Y, "Units", FONT_SIZE_LINE, white_pixel);
 
 	// Convert z value to string
 	ftoa(z, string_data, 2);
 
-	// Draw a label at line 3
-	sd1306_draw_string(OLED_LINE_3_X, OLED_LINE_3_Y, str_tbd2, FONT_SIZE_LINE, white_pixel);
-	// Draw the value of z
-	sd1306_draw_string(sizeof(str_tbd2) * 6, OLED_LINE_3_Y, string_data, FONT_SIZE_LINE, white_pixel);
-	// Draw the units of z
-	sd1306_draw_string(sizeof(str_tbd2) * 6 + (get_str_size(string_data) + 1) * 6, OLED_LINE_3_Y, "Units", FONT_SIZE_LINE, white_pixel);
+	//// Draw a label at line 3
+	//sd1306_draw_string(OLED_LINE_3_X, OLED_LINE_3_Y, str_tbd2, FONT_SIZE_LINE, white_pixel);
+	//// Draw the value of z
+	//sd1306_draw_string(sizeof(str_tbd2) * 6, OLED_LINE_3_Y, string_data, FONT_SIZE_LINE, white_pixel);
+	//// Draw the units of z
+	//sd1306_draw_string(sizeof(str_tbd2) * 6 + (get_str_size(string_data) + 1) * 6, OLED_LINE_3_Y, "Units", FONT_SIZE_LINE, white_pixel);
 
 	// Send the buffer to OLED RAM
 	sd1306_refresh();

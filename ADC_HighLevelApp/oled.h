@@ -20,8 +20,13 @@
 #define OLED_RECT_TITLE_W 127
 #define OLED_RECT_TITLE_H 18
 
-#define OLED_LINE_1_X     0
-#define OLED_LINE_1_Y     16
+
+////SAK 5-21-2020 -- change the position of the OLEN VALUE Line
+//#define OLED_LINE_1_X     0
+//#define OLED_LINE_1_Y     16
+#define OLED_LINE_1_X     5
+#define OLED_LINE_1_Y     26
+
 
 #define OLED_LINE_2_X     0
 #define OLED_LINE_2_Y     26
@@ -43,6 +48,7 @@
 //
 extern uint8_t oled_state;
 extern int BPM;
+
 
 //
 //

@@ -34,6 +34,9 @@
 #include <applibs/adc.h>
 #include <applibs/log.h>
 
+//SAK 1-26-2020     Added LED Support
+#include <applibs/gpio.h>
+
 // By default, this sample's CMake build targets hardware that follows the MT3620
 // Reference Development Board (RDB) specification, such as the MT3620 Dev Kit from
 // Seeed Studios.
@@ -69,7 +72,9 @@ typedef enum {
     ExitCode_Init_SetRefVoltage = 8,
     ExitCode_Init_AdcPollTimer = 9,
 
-    ExitCode_Main_EventLoopFail = 10
+    ExitCode_Main_EventLoopFail = 10,
+    ExitCode_Init_GPIO_OpenAsOutput = 11
+
 } ExitCode;
 
 // File descriptors - initialized to invalid value
@@ -77,6 +82,8 @@ static int adcControllerFd = -1;
 
 static EventLoop *eventLoop = NULL;
 static EventLoopTimer *adcPollTimer = NULL;
+
+static int fd; //SAK 1-26-2020     Added LED Support
 
 // The size of a sample in bits
 static int sampleBitCount = -1;
@@ -108,8 +115,10 @@ int initI2c(void);
 unsigned int micros(void);
 
 //Jitter options defines
-#define OPT_R 10        // min uS allowed lag btw alarm and callback
-#define OPT_U 2000      // sample time uS between alarms
+//#define OPT_R 10        // min uS allowed lag btw alarm and callback
+//#define OPT_U 2000      // sample time uS between alarms
+#define OPT_R 10  // min uS allowed lag btw alarm and callback
+#define OPT_U 50// sample time uS between alarms
 #define OPT_O_ELAPSED 0 // output option uS elapsed time between alarms
 #define OPT_O_JITTER 1  // output option uS jitter (elapsed time - sample time)
 #define OPT_O 1         // defaoult output option
@@ -138,7 +147,8 @@ volatile int secondBeat = 0;                    // when we get the heartbeat bac
 volatile int QS = 0;
 volatile int rate[10];
 
-int BPM = 0;
+extern int BPM = 0;
+int OldBpm = 0;
 
 volatile int IBI = 600;                  // 600ms per beat = 100 Beats Per Minute (BPM)
 volatile int Pulse = 0;
@@ -170,6 +180,8 @@ static void AdcPollingEventHandler(EventLoopTimer *timer)
         return;
     }
 
+
+
     uint32_t value;
     int result = ADC_Poll(adcControllerFd, SAMPLE_POTENTIOMETER_ADC_CHANNEL, &value);
     if (result == -1) {
@@ -183,6 +195,8 @@ static void AdcPollingEventHandler(EventLoopTimer *timer)
     
     //SAK 4-29-2020 - added call
     //Log_Debug("The out sample value is %i \n", value);
+    
+    
     getPulse(value);
 
 
@@ -222,6 +236,20 @@ static ExitCode InitPeripheralsAndHandlers(void)
     oled_state = 7;
     update_oled();
 
+    // put a 0 on the display
+    oled_state = 8;
+    update_oled();
+
+    //SAK 1-26-2020     Added LED Support
+    // Change this GPIO number and the number in app_manifest.json if required by your hardware.
+    //Red LED Is GPIO 8
+    fd = GPIO_OpenAsOutput(8, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (fd < 0) {
+        Log_Debug(
+            "Error opening GPIO: %s (%d). Check that app_manifest.json includes the GPIO used.\n",
+            strerror(errno), errno);
+        return ExitCode_Init_GPIO_OpenAsOutput;
+    }
 
     eventLoop = EventLoop_Create();
     if (eventLoop == NULL) {
@@ -252,7 +280,13 @@ static ExitCode InitPeripheralsAndHandlers(void)
         return ExitCode_Init_SetRefVoltage;
     }
 
-    struct timespec adcCheckPeriod = {.tv_sec = 1, .tv_nsec = 0};
+    //struct timespec adcCheckPeriod = {.tv_sec = 1, .tv_nsec = 0};
+    // sak 5-21-2020 need to check on microseconds not seconds
+    ///  1 microsecond is 1000 nanoseconds
+    ///  1 nanosecond is 0.001 microseconds
+    struct timespec adcCheckPeriod = { .tv_sec = 0, .tv_nsec = 600000};
+
+
     adcPollTimer =
         CreateEventLoopPeriodicTimer(eventLoop, &AdcPollingEventHandler, &adcCheckPeriod);
     if (adcPollTimer == NULL) {
@@ -298,6 +332,7 @@ int main(int argc, char *argv[])
     exitCode = InitPeripheralsAndHandlers();
     initPulseSensorVariables();  // initilaize Pulse Sensor beat finder
 
+    Log_Debug("Ready to run with %d latency at %duS sample rate\n", OPT_R, OPT_U);
 
     // Use event loop to wait for events and trigger handlers, until an error or SIGTERM happens
     while (exitCode == ExitCode_Success) {
@@ -333,37 +368,57 @@ int main(int argc, char *argv[])
         //mcp3004Setup(BASE, SPI_CHAN);    // setup the mcp3004 library
         //pinMode(BLINK_LED, OUTPUT); 
         
-        //sak TODO
+        ////SAK 1-26-2020     Added LED Support
         // Red LED OFF
         //digitalWrite(BLINK_LED, LOW);
-
-
-
+        GPIO_SetValue(fd, GPIO_Value_High);
+ 
         //startTimer(OPT_R, OPT_U);   // start sampling
-
 
         //while (1)
         //{
-            //sampleFlag = 1; // added to execute next if every time should be set in GetPulse
             if (sampleFlag) {
                 sampleFlag = 0;
                 timeOutStart = micros();
 
-                //sak TODO
-                // Red LED OFF
+                ////SAK 1-26-2020     Added LED Support
+                // Red LED OFF/ON
                 //digitalWrite(BLINK_LED, Pulse);
+                //GPIO_SetValue(fd, Pulse);
+
 
                 // PRINT DATA TO TERMINAL
                 //printf("%lu\t%d\t%d\t%d\t%d\n",
-                //    sampleCounter, Signal, BPM, IBI, jitter
+                //    sampleCounter, Signal, BPM, IBI, jitter,
                 //    );
-                Log_Debug("%lu\t%d\t%d\t%d\t%d\n",
-                    sampleCounter, Signal, BPM, IBI, jitter
+
+                Log_Debug("%d\t%d\t%d\t%d\t%d\t%d\n",
+                    sampleCounter, Signal, IBI, BPM, jitter, duration
                     );
-                ////// OLED
-                //// BPM
-                oled_state = 8; 
-                update_oled();
+
+                /// If BPM changes then
+                //// Display BPM on OLED
+                /*if ((BPM != OldBpm))*/
+
+                if ((BPM != 0) && OldBpm != BPM)
+                {
+
+                    ////SAK 1-26-2020     Added LED Support
+                    // Red LED OFF/ON
+                    //digitalWrite(BLINK_LED, Pulse);
+                    GPIO_SetValue(fd, GPIO_Value_Low);// ON
+                    oled_state = 8;
+                    update_oled();
+                    OldBpm = BPM;
+
+                    //Sleep for a blink
+                    struct timespec sleepTime = { 0, 600000 };
+                    nanosleep(&sleepTime, NULL);
+
+                    //turn OFF the led
+                    GPIO_SetValue(fd, GPIO_Value_High); //OFF
+                }
+
 
 
                 //// PRINT DATA TO FILE
@@ -404,14 +459,26 @@ void initPulseSensorVariables(void) {
 }
 
 //SAK //SAK 4-29-2020 -- created fumction
-unsigned int micros(void)
-{
-    //Get the System time in micro seconds
+//unsigned int micros(void)
+//{
+//    //Get the System time in micro seconds
+//
+//    
+//    unsigned int sysTimeMS = time(NULL);
+//    sysTimeMS = sysTimeMS * 600000;
+//    //sysTimeMS = sysTimeMS;
+//    return sysTimeMS;
+//}
 
-    
-    unsigned int sysTimeMS = time(NULL);
-    sysTimeMS = sysTimeMS * 1000;
-    return sysTimeMS;
+#include <sys/time.h>
+
+/**
+ * Returns the current time in microseconds.
+ */
+unsigned int micros(void) {
+    struct timeval currentTime;
+    gettimeofday(&currentTime, NULL);
+    return currentTime.tv_sec * (int)1e6 + currentTime.tv_usec;
 }
 
 void getPulse(uint32_t sig_num) {
@@ -420,14 +487,17 @@ void getPulse(uint32_t sig_num) {
     //{
         thisTime = micros();
         //Signal = analogRead(BASE);
-        Signal = sig_num;
+        //Signal = sig_num/2;
+        Signal = sig_num/2;
         elapsedTime = thisTime - lastTime;
+
+        //Log_Debug("%d\t%d\t%d\t%d\t%d\t%d\n",
+        //    elapsedTime, thisTime, lastTime, BPM, jitter, duration);
+
         lastTime = thisTime;
         jitter = elapsedTime - OPT_U;
         sumJitter += jitter;
         sampleFlag = 1;
-
-
         sampleCounter += 2;         // keep track of the time in mS with this variable
         int N = sampleCounter - lastBeatTime;      // monitor the time since the last beat to avoid noise
 
@@ -507,7 +577,11 @@ void getPulse(uint32_t sig_num) {
 
         }
 
+
         duration = micros() - thisTime;
+
+
+       
 
     //}
 
