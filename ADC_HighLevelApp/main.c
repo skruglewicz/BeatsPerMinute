@@ -97,6 +97,7 @@ static void ClosePeripheralsAndHandlers(void);
 
 // FUNCTION PROTOTYPES (porte from code PulseSensor_timer.c)
 //void getPulse(int sig_num); 
+
 void getPulse(uint32_t sig_num);
 void initPulseSensorVariables(void);
 
