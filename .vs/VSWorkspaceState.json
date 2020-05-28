@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\ADC_HighLevelApp"
+    "\\Local settings (.vs)",
+    "\\Local settings (.vs)\\BeatsPerMinute",
+    "\\Local settings (.vs)\\BeatsPerMinute\\v16"
   ],
-  "SelectedNode": "\\ADC_HighLevelApp\\oled.c",
+  "SelectedNode": "\\Local settings (.vs)",
   "PreviewInSolutionExplorer": false
 }
