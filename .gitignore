@@ -2,8 +2,4 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/BeatsPerMinute/v16/Browse.VC.opendb
-/.vs/BeatsPerMinute/v16/ipch/AutoPCH/f1c505f2e300fe66/MAIN.ipch
-/.vs/BeatsPerMinute/v16/Browse.VC.db-shm
-/.vs/BeatsPerMinute/v16/Browse.VC.db-wal
 /.vs/
