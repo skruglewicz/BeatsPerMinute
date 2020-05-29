@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\ADC_HighLevelApp"
+    "\\ADC_HighLevelApp",
+    "\\Local settings (.vs)\\BeatsPerMinute",
+    "\\Local settings (.vs)\\BeatsPerMinute\\v16"
   ],
-  "SelectedNode": "\\ADC_HighLevelApp\\main.c",
+  "SelectedNode": "\\ADC_HighLevelApp\\.gitignore",
   "PreviewInSolutionExplorer": false
 }
