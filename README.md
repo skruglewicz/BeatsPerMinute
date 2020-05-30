@@ -20,18 +20,19 @@ The sample uses the following Azure Sphere libraries and requires [beta APIs](ht
 | Hardware | Azure Sphere Hardware Definition|
 
 ## Prerequisites
-##TODO
+
 The sample requires the following hardware:
 
-	• [Avnet Azure Sphere MT3620 Starter Kit](https://www.element14.com/community/view-product.jspa?fsku=&nsku=02AH9206&COM=noscript)
+â€¢ [Avnet Azure Sphere MT3620 Starter Kit](https://www.element14.com/community/view-product.jspa?fsku=&nsku=02AH9206&COM=noscript)
 
-	• [Heart Sensor](https://pulsesensor.com/products/pulse-sensor-amped)
-	
-	• 128x64 Yellow Blue SSD1306 I2C OLED Display
-        eg. this one for $6.99 from Amazon...
-	    [SSD1306](https://www.amazon.com/gp/product/B072Q2X2LL/)
+â€¢ [Heart Sensor](https://pulsesensor.com/products/pulse-sensor-amped)
 
-**Note:** By default, this sample targets [MT3620 reference development board (RDB)](https://docs.microsoft.com/azure-sphere/hardware/mt3620-reference-board-design) hardware, such as the MT3620 development kit from Seeed Studio. To build the sample for different Azure Sphere hardware, change the Target Hardware Definition Directory in the project properties. For detailed instructions, see the [README file in the Hardware folder](../../../Hardware/README.md).
+â€¢ [SSD1306](https://www.amazon.com/gp/product/B072Q2X2LL/)
+	128x64 Yellow Blue SSD1306 I2C OLED Display
+	eg. this one for $6.99 from Amazon...
+    
+
+**Note:** By default, this sample targets[Avnet Azure Sphere MT3620 Starter Kit](https://www.element14.com/community/view-product.jspa?fsku=&nsku=02AH9206&COM=noscript) hardware. To build the sample for different Azure Sphere hardware, change the Target Hardware Definition Directory in the project properties. For detailed instructions, see the [README file in the Hardware folder](../../../Hardware/README.md).
 
 ## Prepare the sample
 
@@ -45,12 +46,11 @@ The sample requires the following hardware:
 
 
 ## Set up the ADC connections
-##TODO
-1. Connect MT3620 dev board pin H2.2 (GND) to an outer terminal of the potentiometer.
-1. Connect both pin 1 and pin 2 of jumper J1 to the other outer terminal of the potentiometer. This connects the MT3620 2.5 V output to the ADC VREF pin and to the potentiometer.  
-1. Connect MT3620 dev board pin H2.11 (GPIO41 / ADC0) to the center terminal of the potentiometer.
 
-![ADC connections](./media/ADC-WireUp.png)
+	Attach 3 leads tfrom the Heart Rate Sensor o following 3  pins on the Click 1 header.
+	AN -- Purple
+	+5v -- 5V - RED
+	GND -- GND BLACK
 
 ## Build and run the sample
 
